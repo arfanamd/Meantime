@@ -1,8 +1,16 @@
 [package]
 name = "meantime"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
+license = "THE-BEER-WARE-LICENSE"
+categories = ["command-line-utilities"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+debug = 1
+panic = "abort"
+opt-level = 1
+incremental = true
+overflow-checks = true
 
-[dependencies]
+[build]
+rustc-wrapper = "rustc -C prefer-dynamic"
