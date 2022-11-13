@@ -36,39 +36,31 @@ fn print_result(hour: u32, minute: u32, second: u32) {
  * and stop the program.
  */
 
-fn hour_to_second(hour: &str) -> u32 {
+fn hour_to_second(hour: &str) -> Result<u32, ()> {
 	match hour.parse::<u32>() {
-		Ok(valid)  => return 3600 * valid,
-		Err(error) => {
-			exerr(&format!("{error}"));
-			return 0;
-		}
+		Ok(valid)  => return Ok(3600 * valid),
+		Err(error) => return Err(exerr(&format!("{error}"))),
 	}
 }
 
-fn minute_to_second(minute: &str) -> u32 {
+fn minute_to_second(minute: &str) -> Result<u32, ()> {
 	match minute.parse::<u32>() {
-		Ok(valid)  => return valid * 60,
-		Err(error) => {
-			exerr(&format!("{error}"));
-			return 0;
-		}
+		Ok(valid)  => return Ok(valid * 60),
+		Err(error) => return Err(exerr(&format!("{error}"))),
 	}
 }
 
-fn second_to_second(second: &str) -> u32 {
+fn second_to_second(second: &str) -> Result<u32, ()> {
 	match second.parse::<u32>() {
-		Ok(valid)  => return valid,
-		Err(error) => {
-			exerr(&format!("{error}"));
-			return 0;
-		}
+		Ok(valid)  => return Ok(valid),
+		Err(error) => return Err(exerr(&format!("{error}"))),
 	}
 }
 
 #[test] fn parsing_test() {
-	assert_eq!(32, second_to_second("32"));
-	assert_eq!(999999999, second_to_second("999999999"));
+	assert_eq!(hour_to_second("1"), Ok(3600));
+	assert_eq!(minute_to_second("60"), Ok(3600));
+	assert_eq!(second_to_second("1"), Ok(1));
 }
 
 fn second_to_hour(second: &mut u32) -> u32 {
@@ -98,16 +90,16 @@ fn count_the_time(arg_time: &Vec<&str>, len: &usize) -> u32 {
 
 	match len {
 		3 => {
-			sec_time += hour_to_second(arg_time[2]);
-			sec_time += minute_to_second(arg_time[1]);
-			sec_time += second_to_second(arg_time[0]);
+			sec_time += hour_to_second(arg_time[2]).unwrap();
+			sec_time += minute_to_second(arg_time[1]).unwrap();
+			sec_time += second_to_second(arg_time[0]).unwrap();
 		},
 		2 => {
-			sec_time += minute_to_second(arg_time[1]);
-			sec_time += second_to_second(arg_time[0]);
+			sec_time += minute_to_second(arg_time[1]).unwrap();
+			sec_time += second_to_second(arg_time[0]).unwrap();
 		},
 		1 => {
-			sec_time += second_to_second(arg_time[0]);
+			sec_time += second_to_second(arg_time[0]).unwrap();
 		},
 		_ => exerr("invalid time format."),
 	}
