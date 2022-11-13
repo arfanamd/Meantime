@@ -66,6 +66,11 @@ fn second_to_second(second: &str) -> u32 {
 	}
 }
 
+#[test] fn parsing_test() {
+	assert_eq!(32, second_to_second("32"));
+	assert_eq!(999999999, second_to_second("999999999"));
+}
+
 fn second_to_hour(second: &mut u32) -> u32 {
 	let mut count: u32 = 0;
 
